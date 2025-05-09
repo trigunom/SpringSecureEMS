@@ -2,51 +2,432 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-    <meta charset="ISO-8859-1">
-    <title>Employee Management System</title>
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-          crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMS - Add New Employee</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #1cc88a;
+            --danger-color: #e74a3b;
+            --warning-color: #f6c23e;
+            --info-color: #36b9cc;
+            --dark-color: #5a5c69;
+            --light-color: #f8f9fc;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8f9fc;
+            min-height: 100vh;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            min-height: 100vh;
+            background-color: #4e73df;
+            background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+            background-size: cover;
+            position: fixed;
+            z-index: 1;
+            width: 250px;
+            transition: all 0.3s;
+        }
+
+        .sidebar-brand {
+            height: 4.375rem;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 800;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            margin: 1rem 0;
+        }
+
+        .sidebar-heading {
+            text-align: left;
+            padding: 0 1rem;
+            font-weight: 800;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link.active {
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .nav-link i {
+            margin-right: 0.25rem;
+        }
+
+        /* Content wrapper */
+        .content-wrapper {
+            margin-left: 250px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        /* Navbar */
+        .topbar {
+            background-color: white;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 250px;
+            height: 4.375rem;
+            z-index: 1;
+            transition: all 0.3s;
+        }
+
+        .topbar-divider {
+            width: 0;
+            border-right: 1px solid #e3e6f0;
+            height: calc(4.375rem - 2rem);
+            margin: auto 1rem;
+        }
+
+        .user-info {
+            font-weight: 600;
+            color: #5a5c69;
+        }
+
+        /* Cards */
+        .card {
+            border: none;
+            border-radius: 0.35rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            background-color: #f8f9fc;
+            border-bottom: 1px solid #e3e6f0;
+            padding: 1rem 1.35rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-header h6 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #5a5c69;
+            margin: 0;
+        }
+
+        .card-body {
+            padding: 1.35rem;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: #2e59d9;
+            border-color: #2e59d9;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            color: white;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-success:hover {
+            background-color: #17a673;
+            border-color: #17a673;
+            transform: translateY(-2px);
+        }
+
+        .btn-info {
+            background-color: var(--info-color);
+            border-color: var(--info-color);
+            color: white;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-info:hover {
+            background-color: #2fa3b8;
+            border-color: #2fa3b8;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #858796;
+            border-color: #858796;
+            color: white;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background-color: #717384;
+            border-color: #717384;
+            transform: translateY(-2px);
+        }
+
+        /* Form styles */
+        .form-control {
+            border-radius: 0.35rem;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            border: 1px solid #d1d3e2;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: #bac8f3;
+            box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #5a5c69;
+        }
+
+        .form-text {
+            color: #858796;
+        }
+
+        .input-group-text {
+            background-color: #f8f9fc;
+            border: 1px solid #d1d3e2;
+            border-radius: 0.35rem;
+        }
+
+        /* Footer */
+        .sticky-footer {
+            padding: 2rem 0;
+            flex-shrink: 0;
+            background-color: white;
+            box-shadow: 0 -0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            margin-top: 2rem;
+        }
+
+        .copyright {
+            color: #5a5c69;
+            font-size: 0.875rem;
+        }
+
+        /* Back button */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .back-link:hover {
+            color: #2e59d9;
+            transform: translateX(-3px);
+        }
+
+        .back-link i {
+            margin-right: 0.5rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100px;
+            }
+
+            .sidebar-brand {
+                padding: 1.5rem 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .nav-link span {
+                display: none;
+            }
+
+            .nav-link i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+
+            .content-wrapper, .topbar {
+                margin-left: 100px;
+                left: 100px;
+            }
+        }
+    </style>
 </head>
 <body>
-<!-- Create navigation bar (header) -->
-<nav class="navbar navbar-inverse navbar-fixed-top bg-dark navbar-dark">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#" th:href="@{/}">Employee Management System</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav ml-auto">
-                <li class="nav-item"><a class="nav-link" th:href="@{/employees}">Employees</a></li>
-                <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" th:href="@{/logout}">Logout</a></li>
+<!-- Sidebar -->
+<div class="sidebar">
+    <a class="sidebar-brand" href="/">
+        <i class="fas fa-laugh-wink"></i>
+        <span>EMS</span>
+    </a>
+    <hr class="sidebar-divider">
+    <div class="sidebar-heading">Main</div>
+    <ul class="nav-items list-unstyled">
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/employees}">
+                <i class="fas fa-fw fa-users"></i>
+                <span>Employees</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" th:href="@{/showNewEmployeeForm}">
+                <i class="fas fa-fw fa-user-plus"></i>
+                <span>Add Employee</span>
+            </a>
+        </li>
+    </ul>
+    <hr class="sidebar-divider">
+    <div class="sidebar-heading">Account</div>
+    <ul class="nav-items list-unstyled">
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/logout}">
+                <i class="fas fa-fw fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<!-- Main Content -->
+<div id="content-wrapper">
+    <!-- Topbar -->
+    <nav class="navbar navbar-expand navbar-light topbar mb-4">
+        <div class="container-fluid">
+            <h1 class="h3 text-gray-800">Employee Management</h1>
+            <ul class="navbar-nav ml-auto">
+                <div class="topbar-divider"></div>
+                <li class="nav-item dropdown no-arrow">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="user-info" sec:authentication="principal.username"></span>
+                        <i class="fas fa-user-circle fa-fw ms-2"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" th:href="@{/logout}">
+                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Logout
+                        </a>
+                    </div>
+                </li>
             </ul>
         </div>
+    </nav>
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid content-wrapper">
+        <!-- Back to Employee List -->
+        <a th:href="@{/employees}" class="back-link mb-4">
+            <i class="fas fa-arrow-left"></i> Back to Employee List
+        </a>
+
+        <!-- New Employee Form Card -->
+        <div class="card shadow mb-4">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold">Add New Employee</h6>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/saveEmployee}" th:object="${employee}" method="POST">
+                    <div class="mb-4">
+                        <label for="firstName" class="form-label">First Name</label>
+                        <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                            <input type="text" th:field="*{firstName}" id="firstName" class="form-control"
+                                   placeholder="Enter first name" required autofocus>
+                        </div>
+                        <div class="form-text">Enter employee's first name</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="lastName" class="form-label">Last Name</label>
+                        <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                            <input type="text" th:field="*{lastName}" id="lastName" class="form-control"
+                                   placeholder="Enter last name" required>
+                        </div>
+                        <div class="form-text">Enter employee's last name</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="email" class="form-label">Email Address</label>
+                        <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                            <input type="email" th:field="*{email}" id="email" class="form-control"
+                                   placeholder="Enter email address" required>
+                        </div>
+                        <div class="form-text">Enter employee's email address</div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a th:href="@{/employees}" class="btn btn-secondary me-md-2">
+                            <i class="fas fa-times me-1"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save me-1"></i> Save Employee
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-</nav>
 
-<div class="container my-5">
-    <h1>Employee Management System</h1>
-    <hr>
-    <h2>Save Employee</h2>
-
-    <form action="#" th:action="@{/saveEmployee}" th:object="${employee}"
-          method="POST">
-        <input type="text" th:field="*{firstName}"
-               placeholder="Employee First Name" class="form-control mb-4 col-4">
-
-        <input type="text" th:field="*{lastName}"
-               placeholder="Employee Last Name" class="form-control mb-4 col-4">
-
-        <input type="text" th:field="*{email}"
-               placeholder="Employee Email" class="form-control mb-4 col-4">
-
-        <button type="submit" class="btn btn-info col-2"> Save Employee</button>
-    </form>
-
-    <hr>
-
-    <a th:href="@{/employees}"> Back to Employee List</a>
+    <!-- Footer -->
+    <footer class="sticky-footer">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>© 2025 Employee Management System</span>
+            </div>
+        </div>
+    </footer>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

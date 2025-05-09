@@ -1,80 +1,202 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="ISO-8859-1">
-<title>Registration</title>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-	crossorigin="anonymous">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>EMS - Registration</title>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+		:root {
+            --primary-color: #4e73df;
+            --secondary-color: #1cc88a;
+            --dark-color: #5a5c69;
+            --light-color: #f8f9fc;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #f8f9fc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: none;
+        }
+
+        .btn-success {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            padding: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-success:hover {
+            background-color: #18ab77;
+            border-color: #18ab77;
+            transform: translateY(-2px);
+        }
+
+        .form-control {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .input-group-text {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .alert {
+            border-radius: 0.5rem;
+            font-weight: 500;
+        }
+
+        .login-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .login-link:hover {
+            color: #2e59d9;
+            text-decoration: underline;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--dark-color);
+        }
+	</style>
 </head>
 <body>
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="col-xl-10 col-lg-12 col-md-9">
+			<div class="card o-hidden border-0 shadow-lg my-5">
+				<div class="card-body p-0">
+					<div class="row">
+						<div class="col-lg-5 d-none d-lg-block bg-register-image" style="background: url('/api/placeholder/800/600') no-repeat center; background-size: cover;"></div>
+						<div class="col-lg-7">
+							<div class="p-5">
+								<div class="text-center">
+									<h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+								</div>
 
-	<!-- create navigation bar ( header) -->
-	<nav class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<div class="navbar-header">
-<!--				<button type="button" class="navbar-toggle collapsed"-->
-<!--					data-toggle="collapse" data-target="#navbar" aria-expanded="false"-->
-<!--					aria-controls="navbar">-->
-<!--					<span class="sr-only">Toggle navigation</span> <span-->
-<!--						class="icon-bar"></span> <span class="icon-bar"></span> <span-->
-<!--						class="icon-bar"></span>-->
-<!--				</button>-->
-				<a class="navbar-brand" href="#" th:href="@{/}">Registration and
-					Login Module</a>
-			</div>
-		</div>
-	</nav>
+								<!-- Success message -->
+								<div th:if="${param.success}" class="alert alert-success mb-4">
+									<i class="fas fa-check-circle me-2"></i>You've successfully registered! Please login.
+								</div>
 
-<br>
-<br>
-	<!-- Create HTML registration form -->
-	<div class="container">
-		<div class="row">
-			<div class="col-md-6 col-md-offset-3">
-
-				<!-- success message -->
-				<div th:if="${param.success}">
-					<div class="alert alert-info">You've successfully registered
-						to our awesome app!</div>
+								<form class="user" th:action="@{/registration}" method="post" th:object="${user}">
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="firstName" class="form-label">First Name</label>
+												<div class="input-group mb-3">
+                                                        <span class="input-group-text">
+                                                            <i class="fas fa-user"></i>
+                                                        </span>
+													<input type="text" class="form-control" id="firstName" th:field="*{firstName}"
+														   placeholder="First Name" required autofocus="autofocus">
+												</div>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="lastName" class="form-label">Last Name</label>
+												<div class="input-group mb-3">
+                                                        <span class="input-group-text">
+                                                            <i class="fas fa-user"></i>
+                                                        </span>
+													<input type="text" class="form-control" id="lastName" th:field="*{lastName}"
+														   placeholder="Last Name" required>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="email" class="form-label">Email Address</label>
+										<div class="input-group mb-3">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-envelope"></i>
+                                                </span>
+											<input type="email" class="form-control" id="email" th:field="*{email}"
+												   placeholder="Email Address" required>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="password" class="form-label">Password</label>
+										<div class="input-group mb-3">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-lock"></i>
+                                                </span>
+											<input type="password" class="form-control" id="password" th:field="*{password}"
+												   placeholder="Password" required>
+										</div>
+									</div>
+									<button type="submit" class="btn btn-success btn-block w-100">
+										Register Account
+									</button>
+								</form>
+								<hr>
+								<div class="text-center">
+									<a class="login-link" href="/" th:href="@{/login}">
+										Already have an account? Login!
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-
-				<h1>Registration</h1>
-
-				<form th:action="@{/registration}" method="post" th:object="${user}">
-					<div class="form-group">
-						<label class="control-label" for="firstName"> First Name </label>
-						<input id="firstName" class="form-control" th:field="*{firstName}"
-							required autofocus="autofocus" />
-					</div>
-
-					<div class="form-group">
-						<label class="control-label" for="lastName"> Last Name </label> <input
-							id="lastName" class="form-control" th:field="*{lastName}"
-							required autofocus="autofocus" />
-					</div>
-
-					<div class="form-group">
-						<label class="control-label" for="email"> Email </label> <input
-							id="email" class="form-control" th:field="*{email}" required
-							autofocus="autofocus" />
-					</div>
-
-					<div class="form-group">
-						<label class="control-label" for="password"> Password </label> <input
-							id="password" class="form-control" type="password"
-							th:field="*{password}" required autofocus="autofocus" />
-					</div>
-
-					<div class="form-group">
-						<button type="submit" class="btn btn-success">Register</button>
-						<span>Already registered? <a href="/" th:href="@{/login}">Login
-								here</a></span>
-					</div>
-				</form>
 			</div>
 		</div>
 	</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
