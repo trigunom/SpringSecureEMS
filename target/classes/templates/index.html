@@ -22,6 +22,7 @@
             font-family: 'Nunito', sans-serif;
             background-color: #f8f9fc;
             min-height: 100vh;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
         }
 
         /* Sidebar styles */
@@ -91,13 +92,18 @@
         }
 
         /* Content wrapper */
-        .content-wrapper {
+        #content-wrapper {
             margin-left: 250px;
-            padding: 2rem;
+            padding-top: 5.5rem; /* Adjusted to account for topbar height */
+            padding-bottom: 2rem;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            min-height: 100vh;
             transition: all 0.3s;
+            width: calc(100% - 250px); /* Ensure proper width calculation */
         }
 
-        /* Navbar */
+        /* Topbar */
         .topbar {
             background-color: white;
             box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
@@ -108,6 +114,8 @@
             height: 4.375rem;
             z-index: 1;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
         }
 
         .topbar-divider {
@@ -194,9 +202,15 @@
         }
 
         /* Table */
+        .table-responsive {
+            overflow-x: auto; /* Ensure table scrolls horizontally if needed */
+            min-width: 100%; /* Ensure table takes full width */
+        }
+
         .table {
             border-collapse: separate;
             border-spacing: 0;
+            width: 100%; /* Ensure table takes full width */
         }
 
         .table thead th {
@@ -281,6 +295,7 @@
             background-color: white;
             box-shadow: 0 -0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
             margin-top: 2rem;
+            width: 100%; /* Ensure proper width calculation */
         }
 
         .copyright {
@@ -320,6 +335,12 @@
             color: #d1d3e2;
         }
 
+        /* Content container adjustment */
+        .container-fluid.content-wrapper {
+            padding: 0; /* Remove extra padding */
+            margin-top: 0; /* Remove top margin */
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .sidebar {
@@ -340,9 +361,10 @@
                 font-size: 1.2rem;
             }
 
-            .content-wrapper, .topbar {
+            #content-wrapper, .topbar, .sticky-footer {
                 margin-left: 100px;
                 left: 100px;
+                width: calc(100% - 100px);
             }
         }
 	</style>
